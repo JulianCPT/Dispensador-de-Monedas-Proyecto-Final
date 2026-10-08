@@ -633,6 +633,6 @@ Permiten que una parte de la página se actualice sola cada cierto tiempo sin vo
 
 ## 👤 Autor
 
-**[Tu nombre]** · Universidad Militar Nueva Granada · Microcontroladores
+**Julian Camilo Perez Torres** · Universidad Militar Nueva Granada · Microcontroladores
 
 [![Footer](https://capsule-render.vercel.app/api?type=waving&color=0:0F2027,50:203A43,100:2C5364&height=120&section=footer)](#)
