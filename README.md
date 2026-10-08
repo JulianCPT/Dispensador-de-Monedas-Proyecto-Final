@@ -18,13 +18,13 @@
 
 ## ✨ ¿Qué hace este proyecto?
 
-Un sistema **logístico de monedas colombianas** que se simula en **PyBullet** y se monitorea desde un **dashboard web en Streamlit** (computador o celular). Las monedas se separan por tamaño, se cuentan, se guardan en vasos (**un vaso por denominación**), se tapan con un brazo robótico y un **minitanque con pinza** las lleva por una pista con **3 obstáculos** hasta la meta. El hardware real se controlará con una **ESP32**.
+Un sistema **logístico de monedas colombianas** que se simula en **PyBullet** y se monitorea desde un **dashboard web en Streamlit** (computador o celular). Las monedas se separan por tamaño, se cuentan, se guardan en vasos (**un vaso por denominación**), se tapan con un brazo robótico y un **minitanque con brazo articulado y pinza** las lleva por una pista curva con **5 obstáculos** (3 muros de ladrillo, una zona de gravilla y una escalera) hasta la meta. El hardware real se controlará con una **ESP32**.
 
 | 🪙 Separador | 🧃 Vasos y banda | 🦾 Brazo de tapas | 🚜 Minitanque |
 | --- | --- | --- | --- |
-| Clasifica por diámetro y cuenta cada moneda con un sensor | Cada vaso se llena con las monedas de **un solo valor** y viaja por la banda | Toma una tapa del almacén y sella el vaso | Recoge cada vaso, esquiva los obstáculos y lo entrega en la meta |
+| Clasifica por diámetro y cuenta cada moneda con un sensor | Cada vaso se llena con las monedas de **un solo valor** y viaja por la banda | Toma una tapa del almacén y sella el vaso | Recoge cada vaso con su brazo y pinza, esquiva los muros, **cruza la gravilla y sube y baja la escalera**, y lo entrega en la meta |
 
-> 💡 En este grupo el **minitanque con orugas y pinza reemplaza al dron** del enunciado general.
+> 💡 En este grupo el **minitanque con orugas, brazo articulado y pinza reemplaza al dron** del enunciado general.
 
 ### 📊 Estado del proyecto
 
@@ -33,7 +33,7 @@ Un sistema **logístico de monedas colombianas** que se simula en **PyBullet** y
 | Separador y conteo de monedas (simulado) | ✅ Listo |
 | Vasos por denominación y banda transportadora (simulado) | ✅ Listo |
 | Brazo de tapas (simulado) | ✅ Listo |
-| Minitanque con pinza y pista con 3 obstáculos (simulado) | ✅ Listo |
+| Minitanque con brazo articulado, pinza y pista con 5 obstáculos (simulado) | ✅ Listo |
 | Dashboard en Streamlit (KPIs, gráficas, ruta, 3D, asistente) | ✅ Listo |
 | Asistente con respuesta por texto y voz del navegador | ✅ Listo |
 | Firmware de la ESP32 y conexión al dashboard | 🚧 En desarrollo |
@@ -46,6 +46,8 @@ Un sistema **logístico de monedas colombianas** que se simula en **PyBullet** y
 
 - [🪙 Monedas y dimensiones](#-monedas-y-dimensiones)
 - [📸 Capturas](#-capturas)
+- [🦾 Brazo de tapas (fotos)](#-brazo-de-tapas-fotos)
+- [🚜 Minitanque, escalera y gravilla](#-minitanque-escalera-y-gravilla)
 - [🎥 Video de funcionamiento](#-video-de-funcionamiento)
 - [📐 Arquitectura general](#-arquitectura-general)
 - [📁 Estructura del repositorio](#-estructura-del-repositorio)
@@ -83,11 +85,57 @@ El **peso** que muestra el dashboard es **estimado**: cantidad de cada denominac
 
 ## 📸 Capturas
 
-> Agrega tus capturas en `docs/imagenes/` con estos nombres (o cambia las rutas).
+> Las capturas están en `docs/imagenes/` con estos nombres (o cambia las rutas).
 
-| ![](docs/imagenes/Simulacion%20PyBullet.png)<br>Simulación en PyBullet | ![](docs/imagenes/Dashboard.png)<br>Dashboard en computador |
+| ![](docs/imagenes/Simulacion%20PyBullet.png)<br>Simulación en PyBullet | ![](docs/imagenes/Tanque%20en%20funcionamiento.jpeg)<br>Tanque en funcionamiento |
 | --- | --- |
-| ![](docs/imagenes/Ruta.png)<br>Seguimiento de la ruta | ![](docs/imagenes/Dashboard%20Celular.png)<br>Dashboard en el celular |
+| ![](docs/imagenes/Dashboard.png)<br>Dashboard en computador | ![](docs/imagenes/Dashboard%20Celular.png)<br>Dashboard en el celular |
+| ![](docs/imagenes/Ruta.png)<br>Seguimiento de la ruta | ![](docs/imagenes/mapa_dashboard.png)<br>Mapa de la pista en el dashboard (modo demo) |
+
+![](https://capsule-render.vercel.app/api?type=rect&color=0:0F2027,100:203A43&height=3&section=header)
+
+## 🦾 Brazo de tapas (fotos)
+
+Secuencia del brazo que toma una tapa del almacén y la coloca sobre el vaso que espera en la banda. Cada foto sale de la simulación, moviendo el brazo con el mismo control que usa el sistema (giro, bajada y pinza).
+
+| Paso | Qué ocurre |
+| --- | --- |
+| 1. Reposo | El brazo apunta al almacén de tapas |
+| 2. Toma la tapa | Baja y cierra la pinza sobre la tapa |
+| 3. Sube con la tapa | Levanta la tapa agarrada |
+| 4. Gira al vaso | Gira 180° hasta quedar sobre el vaso |
+| 5. Coloca la tapa | Baja y suelta la tapa: el vaso queda sellado |
+
+[![Secuencia del brazo de tapas](docs/imagenes/brazo_tapas_secuencia_3cuartos.png)](docs/imagenes/brazo_tapas_secuencia_3cuartos.png)
+
+![](https://capsule-render.vercel.app/api?type=rect&color=0:0F2027,100:203A43&height=3&section=header)
+
+## 🚜 Minitanque, escalera y gravilla
+
+El minitanque lleva un **brazo articulado con 3 servos**: el **servo 1** sube y baja el brazo girando en el hombro, y los **servos 2 y 3** mueven cada uno un dedo de la pinza (cerrar y abrir). La muñeca gira al contrario que el hombro (como un paralelogramo mecánico, no es un servo), así la pinza siempre queda derecha y el vaso no se inclina al levantarlo.
+
+[![Secuencia del brazo del minitanque: baja, cierra la pinza y levanta el vaso](docs/imagenes/evidencia_brazo_secuencia.png)](docs/imagenes/evidencia_brazo_secuencia.png)
+
+*Izquierda a derecha: baja el brazo, cierra la pinza sobre el vaso y lo levanta.*
+
+[![Poses del brazo del minitanque](docs/imagenes/brazo_poses.png)](docs/imagenes/brazo_poses.png)
+
+*Cuatro poses: brazo arriba, brazo abajo con la pinza abierta, pinza cerrada sobre el vaso y vaso levantado.*
+
+La pista tiene **5 obstáculos**. Los muros se esquivan por el lado libre; la **gravilla** y la **escalera** se cruzan, porque un tanque de orugas debe poder avanzar sobre ellos:
+
+| ![](docs/imagenes/evidencia_gravilla.png)<br>**Obstáculo 2 · Gravilla:** 230 piedras sueltas sobre la carretera | ![](docs/imagenes/evidencia_escalera.png)<br>**Obstáculo 3 · Escalera:** 3 subidas, plataforma y 3 bajadas de 2 cm |
+| --- | --- |
+
+| # | Obstáculo | Cómo lo supera el tanque |
+| --- | --- | --- |
+| 1 | Muro de ladrillo | Lo esquiva por el lado libre de la carretera |
+| 2 | Gravilla | La cruza de frente (230 piedras de formas y tamaños distintos) |
+| 3 | Escalera | Sube 3 escalones de 2 cm, cruza la plataforma y baja otros 3 |
+| 4 | Muro de ladrillo | Lo esquiva por el lado libre |
+| 5 | Muro de ladrillo | Lo esquiva por el lado libre |
+
+> 💡 Los escalones son de **2 cm**: con las ruedas de este tanque, escalones de 2,5 o 3 cm ya no los sube.
 
 ![](https://capsule-render.vercel.app/api?type=rect&color=0:0F2027,100:203A43&height=3&section=header)
 
@@ -133,9 +181,16 @@ Logistica-de-Monedas-Inteligentes/
 │   ├── imagenes/
 │   │   ├── diagrama-arquitectura.svg
 │   │   ├── Simulacion PyBullet.png
+│   │   ├── Tanque en funcionamiento.jpeg
 │   │   ├── Dashboard.png
+│   │   ├── Dashboard Celular.png
 │   │   ├── Ruta.png
-│   │   └── Dashboard Celular.png
+│   │   ├── mapa_dashboard.png
+│   │   ├── brazo_tapas_secuencia_3cuartos.png
+│   │   ├── evidencia_brazo_secuencia.png
+│   │   ├── brazo_poses.png
+│   │   ├── evidencia_gravilla.png
+│   │   └── evidencia_escalera.png
 │   └── videos/
 │       ├── Video Funcionamiento.mp4
 │       └── GIF FUNCIONAMIENTO.gif
@@ -169,7 +224,7 @@ pip install -r requirements.txt
 | **Streamlit** (`streamlit`) | Crea el dashboard web: pestañas, tarjetas, gráficas, chat y actualización automática | `app_streamlit.py` | Es lo que pide el enunciado y convierte un script de Python en una página que también se ve en el celular, sin escribir HTML ni JavaScript |
 | **Altair** (`altair`) | Gráficas de cantidad por denominación y valor acumulado | `app_streamlit.py` | Ya viene como dependencia de Streamlit y genera gráficas interactivas con pocas líneas |
 | **Pandas** (`pandas`) | Tablas de datos para las gráficas y el detalle por moneda | `app_streamlit.py` | Es el formato que Streamlit y Altair esperan para graficar |
-| **json, math, argparse, random, time, pathlib, urllib, base64, re** (módulos estándar) | Escribir/leer `estado.json`, geometría, argumentos de la terminal, tolerancias aleatorias, tiempos, archivos, lectura por HTTP, imagen SVG de la ruta y reglas del asistente | Ambos | Vienen incluidos con Python; no requieren instalación |
+| **json, math, argparse, random, time, pathlib, urllib, base64, re, bisect, tempfile** (módulos estándar) | Escribir/leer `estado.json`, geometría de la pista, argumentos de la terminal, tolerancias aleatorias, tiempos, archivos, lectura por HTTP, imagen SVG de la ruta y reglas del asistente | Ambos | Vienen incluidos con Python; no requieren instalación |
 
 **Ver `requirements.txt` comentado**
 
@@ -220,6 +275,7 @@ streamlit run app_streamlit.py --server.address 0.0.0.0
 | `--velocidad` | `1.0` | Factor de velocidad de la ventana (`3` = tres veces más rápida) |
 | `--max-tiempo` | `900` | Tiempo máximo simulado, en segundos |
 | `--semilla` | — | Semilla aleatoria para repetir exactamente la misma corrida |
+| `--traza` | — | Imprime cada cambio de estado del tanque y dónde cae cada vaso (depuración) |
 
 Ejemplo: `python sim_monedas.py --monedas 12 --velocidad 3`
 
@@ -255,12 +311,13 @@ JSON que la simulación escribe unas 4 veces por segundo (de forma atómica, par
     {"denom": 200, "n": 7, "valor": 1400, "tapado": true, "entregado": true}
   ],
   "brazo_tapas": {"estado": "REPOSO", "tapas_puestas": 5},
-  "tanque": {"x": 1.9, "y": 1.2, "yaw": 1.57, "estado": "EN_RUTA",
-             "obstaculos_superados": 2, "colisiones": 0},
+  "tanque": {"x": 3.4, "y": 1.2, "yaw": 1.57, "estado": "EN_RUTA",
+             "servos": {"brazo_deg": 49.0, "pinza_izq_deg": -26.0, "pinza_der_deg": -26.0},
+             "obstaculos_superados": 2, "obstaculos_total": 5, "colisiones": 0},
   "meta_alcanzada": false,
-  "trayectoria": [[1.8, -0.8], [1.8, 0.2]],
+  "trayectoria": [[2.3, 0.0], [2.8, 0.1]],
   "serie": [[0.8, 50, 1], [1.6, 250, 2]],
-  "escenario": {"muros": [], "camino": [], "meta": []}
+  "escenario": {"obstaculos": [], "camino": [], "ruta": [], "meta": []}
 }
 ```
 
@@ -268,10 +325,12 @@ JSON que la simulación escribe unas 4 veces por segundo (de forma atómica, par
 | --- | --- |
 | `cuentas` | Cantidad contada por cada denominación |
 | `vasos` | Un vaso por denominación: cuántas monedas lleva, su valor, si ya tiene tapa y si ya fue entregado |
-| `tanque.estado` | Estado de la máquina de estados del tanque (`ESPERANDO_VASO`, `ACERCARSE`, `ALINEAR`, `AGARRAR`, `EN_RUTA`, `SOLTAR`, `REGRESAR`, `FIN`) |
+| `tanque.estado` | Estado de la máquina de estados del tanque (`ESPERANDO_VASO`, `ACERCARSE`, `ALINEAR`, `BAJAR_BRAZO`, `AGARRAR`, `SUBIR_BRAZO`, `EN_RUTA`, `BAJAR_ENTREGA`, `SOLTAR`, `SUBIR_VACIO`, `REGRESAR`, `FIN`) |
+| `tanque.servos` | Ángulo del servo 1 (hombro del brazo) y de los servos 2 y 3 (dedos izquierdo y derecho de la pinza) |
+| `tanque.obstaculos_superados` / `obstaculos_total` | Cuántos de los 5 obstáculos ya pasó el tanque en el viaje actual |
 | `trayectoria` | Puntos recorridos por el tanque en el viaje actual (la línea naranja del mapa) |
 | `serie` | Historial `[tiempo, valor, monedas]` para la gráfica de valor acumulado |
-| `escenario` | Posición de muros, camino y meta, para que el dashboard dibuje la misma pista |
+| `escenario` | Carretera (`camino`), ruta del tanque (`ruta`), obstáculos (con su tipo, posición y orientación) y meta, para que el dashboard dibuje la misma pista |
 
 > 💡 Como la `trayectoria` y la `serie` viajan **dentro** del JSON, un celular que abra el dashboard tarde ve igualmente todo el historial.
 
@@ -287,7 +346,7 @@ La ESP32 reemplazará la parte simulada: leerá los sensores de cada canal, mane
 | --- | --- |
 | Conteo por canal | Un sensor por canal (CNY70 o de barrera) en pines **ADC1** de la ESP32 (los ADC2 no funcionan bien con el Wi-Fi activo) |
 | Banda y tanque | Motores DC con puente H (orugas diferenciales) |
-| Pinza y brazos | Servos |
+| Pinza y brazos | Servos: 3 en el brazo del tanque (hombro y dos dedos) y los del brazo de tapas |
 | Comunicación | Wi-Fi (HTTP con JSON), Bluetooth o ESP-NOW |
 
 ![](https://capsule-render.vercel.app/api?type=rect&color=0:0F2027,100:203A43&height=3&section=header)
@@ -348,7 +407,7 @@ else:
 limite_adelante = meta_x - SEP_VASOS
 ```
 
-Cada vaso avanza hasta su parada: la **estación del brazo** si aún no tiene tapa, o el **final de la banda** si ya la tiene. Un vaso nunca pasa al que va adelante (`SEP_VASOS`), así se forma una fila ordenada.
+Cada vaso avanza hasta su parada: la **estación del brazo** si aún no tiene tapa, o el **final de la banda** si ya la tiene. Un vaso nunca pasa al que va adelante (`SEP_VASOS`), así se forma una fila ordenada. La banda mide 2,7 m: la estación de tapas queda a mitad de camino y el final de la banda es donde recoge el tanque.
 
 **🦾 Brazo de tapas (máquina de estados)**
 
@@ -360,6 +419,24 @@ elif brazo_estado == "GIRAR_A_VASO":
 ```
 
 El ciclo completo es: `REPOSO → BAJAR_A_TAPA → AGARRAR_TAPA → SUBIR_CON_TAPA → GIRAR_A_VASO → BAJAR_A_VASO → SOLTAR_TAPA → SUBIR_SIN_TAPA → VOLVER`. Cada paso espera a que la articulación llegue a su objetivo (o a un tiempo máximo, para no quedarse trabado). Tiene tres movimientos: giro, bajada y pinza.
+
+**🛣️ La pista: carretera curva y obstáculos**
+
+```python
+ESQUINAS = [PICK_POS, (4.00, 0.00), (4.00, 2.00), (2.60, 2.00), (2.60, 3.40), (4.20, 3.40)]
+RADIO_CURVA = 0.40
+CL = _linea_central(ESQUINAS, RADIO_CURVA)      # tramos rectos unidos por arcos
+
+OBSTACULOS_DEF = [
+    {"tipo": "muro",     "nombre": "Muro",     "p": (2.95, 0.00), "lado": +1},
+    {"tipo": "gravilla", "nombre": "Gravilla", "p": (3.35, 0.00)},
+    {"tipo": "escalera", "nombre": "Escalera", "p": (4.00, 1.00)},
+    {"tipo": "muro",     "nombre": "Muro",     "p": (3.30, 2.00), "lado": -1},
+    {"tipo": "muro",     "nombre": "Muro",     "p": (2.60, 2.70), "lado": +1},
+]
+```
+
+Se define la pista con unas pocas esquinas y la función `_linea_central` las une con arcos para formar la carretera en S. Los obstáculos se ubican por un punto sobre la carretera. La ruta del tanque (`RUTA`) sigue la línea central y se desvía suavemente al lado libre junto a cada muro. La **gravilla** son 230 cajas pequeñas de formas y grises distintos, y la **escalera** son cajas macizas de 2 cm de alto cada una (3 de subida, una plataforma y 3 de bajada).
 
 **🚜 Control diferencial de las orugas**
 
@@ -375,24 +452,46 @@ def mover(tanque, v, w):
                                 targetVelocity=vr / R_RUEDA, force=FUERZA_RUEDA)
 ```
 
-Cada oruga son 3 ruedas acopladas. Con una velocidad lineal `v` y una angular `w` se calcula la velocidad de cada lado: si un lado va más rápido que el otro, el tanque gira.
+Cada oruga son 3 ruedas acopladas. Con una velocidad lineal `v` y una angular `w` se calcula la velocidad de cada lado: si un lado va más rápido que el otro, el tanque gira. Las ruedas tienen **fricción anisótropa** (mucho agarre al rodar y poco de lado): con ella el tanque sube escalones y gira en el sitio de forma pareja en cualquier rumbo.
+
+**🦾 Brazo articulado del tanque (3 servos)**
+
+```python
+def brazo_t(tanque, arriba):                 # servo 1: hombro
+    objetivo = BRAZO_T_ARRIBA if arriba else 0.0
+    p.setJointMotorControl2(tanque, J_BRAZO_T, p.POSITION_CONTROL,
+                            targetPosition=objetivo, force=12, maxVelocity=1.0)
+
+def muneca_paralela(tanque):                 # paralelogramo: la pinza siempre derecha
+    ang = p.getJointState(tanque, J_BRAZO_T)[0]
+    p.setJointMotorControl2(tanque, J_MUNECA_T, p.POSITION_CONTROL,
+                            targetPosition=-ang, force=6, maxVelocity=3.0)
+
+def pinza(tanque, cerrada):                  # servos 2 y 3: un dedo cada uno
+    objetivo = DEDO_CERRADO if cerrada else DEDO_ABIERTO
+    for j in (J_DEDO_T_I, J_DEDO_T_D):
+        p.setJointMotorControl2(tanque, j, p.POSITION_CONTROL,
+                                targetPosition=objetivo, force=2.0, maxVelocity=1.5)
+```
+
+El **hombro** (servo 1) sube y baja el brazo; con el brazo abajo queda horizontal y la pinza queda a la altura del vaso. Los **dos dedos** (servos 2 y 3) cuelgan de la palma y giran hacia adentro para apretar el vaso. La **muñeca** gira lo contrario al hombro en cada paso de la simulación, así la pinza no se inclina y el vaso va vertical.
 
 **🧭 Ir a un punto**
 
 ```python
 err = norm_ang(math.atan2(dy, dx) - yaw)
 w = max(-W_MAX, min(W_MAX, 2.5 * err))
-if abs(err) < 0.6:
+if abs(err) < lim_err:
     v = min(V_MAX, 1.5 * dist) * max(0.0, math.cos(err)) ** 2
 else:
-    v = 0.0
+    rotar_en_sitio(tanque, w, err)
 ```
 
-Un controlador proporcional: gira hacia el punto y solo avanza cuando ya está bien orientado; además frena al acercarse. La ruta son varios puntos que **rodean** los 3 obstáculos.
+Un controlador proporcional: gira hacia el punto y solo avanza cuando ya está bien orientado; además frena al acercarse. Si el tanque se queda sin moverse, un vigilante de atascos lo hace retroceder un momento.
 
 **🔁 Estados del tanque**
 
-`ESPERANDO_VASO → ACERCARSE → ALINEAR → AGARRAR → EN_RUTA → SOLTAR → REGRESAR → …` y, al entregar el último vaso, `FIN`. Cada vaso se deja en un sitio distinto de la meta (`ruta_entrega`), y el tanque regresa por el mismo camino (`ruta_regreso`) para buscar el siguiente.
+`ESPERANDO_VASO → ACERCARSE → ALINEAR → BAJAR_BRAZO → AGARRAR → SUBIR_BRAZO → EN_RUTA → BAJAR_ENTREGA → SOLTAR → SUBIR_VACIO → REGRESAR → …` y, al entregar el último vaso, `FIN`. Al llegar al final de la pista el tanque se orienta hacia la meta, baja el vaso, abre la pinza y sube el brazo. Cada vaso se deja en una **casilla fija** de la meta (filas de 4 vasos, `ruta_entrega`), y el tanque regresa por el mismo camino (`ruta_regreso`) para buscar el siguiente.
 
 **💾 Escritura atómica del JSON**
 
@@ -435,7 +534,7 @@ Cantidad de cada denominación por su peso nominal, editable en la barra lateral
 
 **🗺️ Mapa de la ruta**
 
-La pista se dibuja como una imagen **SVG** (carretera, obstáculos, meta, trayectoria naranja y el tanque rotado según su orientación) incrustada en la página. Se redibuja con cada actualización y se adapta al ancho de la pantalla.
+La pista se dibuja como una imagen **SVG**: carretera curva con bordillos rojo y blanco y línea central, los 5 obstáculos (muros, gravilla con piedras y escalera con franjas amarillas, rotados según la carretera), la meta, la trayectoria naranja y el tanque rotado según su orientación. Se redibuja con cada actualización y se adapta al ancho de la pantalla.
 
 **🤖 Asistente por reglas y voz**
 
@@ -476,6 +575,14 @@ Forma de organizar un proceso en pasos: cada estado hace una cosa y pasa al sigu
 
 Un vehículo de dos orugas gira por la **diferencia** de velocidad entre sus lados: igual velocidad, avanza recto; velocidades distintas, gira; velocidades opuestas, gira sobre su eje.
 
+**🦾 Muñeca en paralelo (paralelogramo)**
+
+Cuando el brazo sube, la pinza tendería a inclinarse con él. Un paralelogramo mecánico hace que la muñeca gire exactamente lo contrario al hombro y la pinza quede siempre derecha. En la simulación se imita haciendo que el ángulo de la muñeca sea el opuesto al del hombro en cada paso; en el robot real se resolvería con una barra paralela o con un servo adicional.
+
+**🧗 Fricción anisótropa y holgura al suelo**
+
+Para que un tanque de orugas suba escalones necesita mucho agarre al rodar y holgura bajo el chasis; para girar en el sitio necesita poco agarre lateral. La simulación lo modela dando a cada rueda fricción distinta según la dirección (anisótropa) y subiendo el chasis 4 cm sobre el suelo.
+
 **📡 `estado.json` como contrato**
 
 El dashboard no depende de cómo se produce el dato (simulación o ESP32), solo de que el JSON tenga ese formato. Eso permite cambiar la fuente sin tocar la visualización.
@@ -503,7 +610,10 @@ Permiten que una parte de la página se actualice sola cada cierto tiempo sin vo
 | La pestaña 🎮 está vacía | Verifica que `minitanque.html` esté junto a `app_streamlit.py` y que haya internet |
 | El asistente no habla | Pulsa el botón 🔊 (los navegadores exigen un clic) y revisa que el navegador tenga una voz en español |
 | La simulación va muy lenta | Usa `--velocidad 3` o menos monedas con `--monedas 12` |
-| El tanque gira mal sobre su eje | Ajusta la fricción lateral de las ruedas (`lateralFriction`) o `FUERZA_RUEDA` en `sim_monedas.py` |
+| El tanque gira mal sobre su eje | Ajusta la fricción anisótropa de las ruedas (`anisotropicFriction` y `lateralFriction` en `crear_tanque`) o `FUERZA_RUEDA` en `sim_monedas.py` |
+| El tanque no sube la escalera | Los escalones deben ser de 2 cm o menos (`ESC_ALTO`); con escalones más altos las ruedas no alcanzan a subirlos |
+| El tanque se atasca en la gravilla | Cruza, pero a veces patina unos segundos; baja `GRAV_N` (cantidad de piedras) para hacerla más fácil |
+| Dos simulaciones a la vez fallan con `estado.tmp` | Cada simulación escribe `estado.json` en su carpeta de trabajo: corre cada una desde una carpeta distinta |
 
 ![](https://capsule-render.vercel.app/api?type=rect&color=0:0F2027,100:203A43&height=3&section=header)
 
@@ -513,8 +623,10 @@ Permiten que una parte de la página se actualice sola cada cierto tiempo sin vo
 - Al llegar al vaso, la moneda se retira de la simulación y se apila una **capa visual** (máximo 8 capas visibles). El conteo real es el del JSON.
 - Las monedas se dibujan a **escala ×3** para que se vean y no atraviesen el piso por ser tan delgadas.
 - Las **tapas** del brazo y del vaso son visuales (aparecen y desaparecen).
-- La sujeción del vaso por el tanque se hace con un **constraint fijo**.
-- La carretera, las líneas y los adornos son solo visuales (sin colisión).
+- La sujeción del vaso por el tanque se hace con un **constraint fijo** a la palma de la pinza (los dedos también lo aprietan físicamente).
+- La **muñeca del tanque** no es un servo: se mueve en paralelo al hombro para mantener la pinza derecha (equivale a un paralelogramo mecánico).
+- La carretera, las líneas, los bordillos y los adornos son solo visuales (sin colisión); los **muros, la gravilla y la escalera sí tienen colisión**.
+- Los escalones miden 2 cm: es el máximo que sube este tanque con sus ruedas.
 
 ![](https://capsule-render.vercel.app/api?type=rect&color=0:0F2027,100:203A43&height=3&section=header)
 
