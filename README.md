@@ -87,10 +87,14 @@ El **peso** que muestra el dashboard es **estimado**: cantidad de cada denominac
 
 > Las capturas están en `docs/imagenes/` con estos nombres (o cambia las rutas).
 
-| ![](docs/imagenes/Simulacion%20PyBullet.png)<br>Simulación en PyBullet | ![](docs/imagenes/Tanque%20en%20funcionamiento.jpeg)<br>Tanque en funcionamiento |
+**Simulación en PyBullet**
+
+![Tanque en funcionamiento](docs/imagenes/Tanque%20en%20funcionamiento.jpeg)
+
+**Dashboard en el celular** (misma red Wi-Fi)
+
+| ![](docs/imagenes/Dashboard%20Celular.png)<br>Panel de control | ![](docs/imagenes/Ruta.png)<br>Seguimiento de la ruta |
 | --- | --- |
-| ![](docs/imagenes/Dashboard.png)<br>Dashboard en computador | ![](docs/imagenes/Dashboard%20Celular.png)<br>Dashboard en el celular |
-| ![](docs/imagenes/Ruta.png)<br>Seguimiento de la ruta | ![](docs/imagenes/mapa_dashboard.png)<br>Mapa de la pista en el dashboard (modo demo) |
 
 ![](https://capsule-render.vercel.app/api?type=rect&color=0:0F2027,100:203A43&height=3&section=header)
 
@@ -180,12 +184,9 @@ Logistica-de-Monedas-Inteligentes/
 ├── docs/
 │   ├── imagenes/
 │   │   ├── diagrama-arquitectura.svg
-│   │   ├── Simulacion PyBullet.png
 │   │   ├── Tanque en funcionamiento.jpeg
-│   │   ├── Dashboard.png
 │   │   ├── Dashboard Celular.png
 │   │   ├── Ruta.png
-│   │   ├── mapa_dashboard.png
 │   │   ├── brazo_tapas_secuencia_3cuartos.png
 │   │   ├── evidencia_brazo_secuencia.png
 │   │   ├── brazo_poses.png
