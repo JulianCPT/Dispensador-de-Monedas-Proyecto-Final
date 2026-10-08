@@ -108,8 +108,6 @@ Secuencia del brazo que toma una tapa del almacén y la coloca sobre el vaso que
 
 [![Secuencia del brazo de tapas](docs/imagenes/brazo_tapas_secuencia_3cuartos.png)](docs/imagenes/brazo_tapas_secuencia_3cuartos.png)
 
-> 📂 Las fotos sueltas de cada paso están en `docs/imagenes/brazo_tapas/` (por ejemplo `brazo_tapas_03_sube_con_tapa_tres_cuartos.png`).
-
 ![](https://capsule-render.vercel.app/api?type=rect&color=0:0F2027,100:203A43&height=3&section=header)
 
 ## 🚜 Minitanque, escalera y gravilla
@@ -189,7 +187,6 @@ Logistica-de-Monedas-Inteligentes/
 │   │   ├── Ruta.png
 │   │   ├── mapa_dashboard.png
 │   │   ├── brazo_tapas_secuencia_3cuartos.png
-│   │   ├── brazo_tapas/          # fotos sueltas de cada paso del brazo de tapas
 │   │   ├── evidencia_brazo_secuencia.png
 │   │   ├── brazo_poses.png
 │   │   ├── evidencia_gravilla.png
