@@ -87,7 +87,7 @@ El **peso** que muestra el dashboard es **estimado**: cantidad de cada denominac
 
 > Las capturas están en `docs/imagenes/` con estos nombres (o cambia las rutas).
 
-| ![](docs/imagenes/Simulacion%20PyBullet.png)<br>Simulación en PyBullet | ![](docs/imagenes/Tanque%20en%20funcionamiento.png)<br>Tanque en funcionamiento |
+| ![](docs/imagenes/Simulacion%20PyBullet.png)<br>Simulación en PyBullet | ![](docs/imagenes/Tanque%20en%20funcionamiento.jpeg)<br>Tanque en funcionamiento |
 | --- | --- |
 | ![](docs/imagenes/Dashboard.png)<br>Dashboard en computador | ![](docs/imagenes/Dashboard%20Celular.png)<br>Dashboard en el celular |
 | ![](docs/imagenes/Ruta.png)<br>Seguimiento de la ruta | ![](docs/imagenes/mapa_dashboard.png)<br>Mapa de la pista en el dashboard (modo demo) |
@@ -106,13 +106,7 @@ Secuencia del brazo que toma una tapa del almacén y la coloca sobre el vaso que
 | 4. Gira al vaso | Gira 180° hasta quedar sobre el vaso |
 | 5. Coloca la tapa | Baja y suelta la tapa: el vaso queda sellado |
 
-**Vista en tres cuartos**
-
-[![Secuencia del brazo de tapas en tres cuartos](docs/imagenes/brazo_tapas_secuencia_3cuartos.png)](docs/imagenes/brazo_tapas_secuencia_3cuartos.png)
-
-**Vista lateral**
-
-[![Secuencia del brazo de tapas, vista lateral](docs/imagenes/brazo_tapas_secuencia.png)](docs/imagenes/brazo_tapas_secuencia.png)
+[![Secuencia del brazo de tapas](docs/imagenes/brazo_tapas_secuencia_3cuartos.png)](docs/imagenes/brazo_tapas_secuencia_3cuartos.png)
 
 > 📂 Las fotos sueltas de cada paso están en `docs/imagenes/brazo_tapas/` (por ejemplo `brazo_tapas_03_sube_con_tapa_tres_cuartos.png`).
 
@@ -189,13 +183,12 @@ Logistica-de-Monedas-Inteligentes/
 │   ├── imagenes/
 │   │   ├── diagrama-arquitectura.svg
 │   │   ├── Simulacion PyBullet.png
-│   │   ├── Tanque en funcionamiento.png
+│   │   ├── Tanque en funcionamiento.jpeg
 │   │   ├── Dashboard.png
 │   │   ├── Dashboard Celular.png
 │   │   ├── Ruta.png
 │   │   ├── mapa_dashboard.png
 │   │   ├── brazo_tapas_secuencia_3cuartos.png
-│   │   ├── brazo_tapas_secuencia.png
 │   │   ├── brazo_tapas/          # fotos sueltas de cada paso del brazo de tapas
 │   │   ├── evidencia_brazo_secuencia.png
 │   │   ├── brazo_poses.png
